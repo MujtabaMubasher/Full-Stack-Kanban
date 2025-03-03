@@ -4,6 +4,8 @@ import { useAuth } from "./authContext";
 
 const TodoContext = createContext();
 
+const API_URL = "http://localhost:8000/api/v1"
+
 export const TodoProvider = ({ children }) => {
   const { user, userId } = useAuth();
   const [todos, setTodos] = useState([]);
@@ -29,7 +31,7 @@ export const TodoProvider = ({ children }) => {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/v1/todos/getall", { withCredentials: true });
+      const response = await axios.get(`${API_URL}/todos/getall`, { withCredentials: true });
       setTodos(response.data.data);
       //console.log("From Fetch All todos ",response.data.data);
       //console.log(todos);
@@ -42,7 +44,7 @@ export const TodoProvider = ({ children }) => {
 
   const addTodo = async (todoData) => {
     if (!user) return alert("You must be logged in to add a todo");
-    const response = await axios.post("http://localhost:8000/api/v1/todos/create", todoData, { withCredentials: true });
+    const response = await axios.post(`${API_URL}/todos/create`, todoData, { withCredentials: true });
     //console.log(response.data.data)
     setTodos([...todos, response.data.data]);
     //console.log(todos)
@@ -51,7 +53,7 @@ export const TodoProvider = ({ children }) => {
   const removeTodo = async (id) => {
     if (!user) return alert("You must be logged in to delete a todo");
     console.log(id)
-    const response = await axios.delete(`http://localhost:8000/api/v1/todos/delete/${id}`, { withCredentials: true });
+    const response = await axios.delete(`${API_URL}/todos/delete/${id}`, { withCredentials: true });
     //console.log(response.data.success)
     if (response.data.success) {
         setTodos(todos.filter(todo => todo._id !== id));
@@ -61,7 +63,7 @@ export const TodoProvider = ({ children }) => {
   const editTodo = async (id, editData) => {
     if (!user) return alert("You must be logged in to delete a todo");
     console.log(id)
-    const response = await axios.put(`http://localhost:8000/api/v1/todos/update/${id}`, editData, { withCredentials: true });
+    const response = await axios.put(`${API_URL}/todos/update/${id}`, editData, { withCredentials: true });
     //console.log(response)
     if (response.data.success) {
         fetchTodos();
@@ -72,7 +74,7 @@ export const TodoProvider = ({ children }) => {
     if (!user) return alert("You must be logged in to move a todo");
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/todos/move/${id}`,
+        `${API_URL}/todos/move/${id}`,
         { category: newCategory },
         { withCredentials: true }
       );
@@ -106,7 +108,7 @@ export const TodoProvider = ({ children }) => {
 
   const fetchActivityLogs = async (userID) => {
      try {
-       const {data} =  await axios.get( `http://localhost:8000/api/v1/todos/activitylogs/${userID}`, { withCredentials: true })
+       const {data} =  await axios.get( `${API_URL}/todos/activitylogs/${userID}`, { withCredentials: true })
        //console.log(data.activityLogs)
        if (data) {
         setActivityLoga(data.activityLogs)
