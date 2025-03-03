@@ -4,7 +4,7 @@ import { useAuth } from "./authContext";
 
 const TodoContext = createContext();
 
-const API_URL = "http://localhost:8000/api/v1"
+const API_URL = "https://kanbann-backend.onrender.com/api/v1"
 
 export const TodoProvider = ({ children }) => {
   const { user, userId } = useAuth();
